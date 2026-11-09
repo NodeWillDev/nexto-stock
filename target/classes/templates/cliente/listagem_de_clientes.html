@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NexoEstoque</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+    <header>
+        <div class="header">
+            <div class="logo"><a th:href="@{/}" class="brand-link"><span class="brand-symbol">N</span><span>Nexo<span class="brand-accent">Estoque</span></span></a></div>
+            <div class="header-status"><span class="status-dot"></span> Painel de gestão</div>
+        </div>
+    </header>
+    <section>
+        <div class="sidenav">
+            <div class="menu"><div class="menu-label">MENU PRINCIPAL</div><div class="link home-link"><span class="home-icon">⌂</span><a th:href="@{/}">Visão geral</a></div>
+                <div class="link"><span class="gravity-ui--tag-dollar"></span><a th:href="@{/venda/criar}">Nova venda</a>
+                </div>
+                <div class="link"><span class="bxs--t-shirt"></span><a th:href="@{/produto/criar}">Cadastro de
+                        produtos</a></div>
+                <div class="link"><span class="mdi--people-add"></span><a th:href="@{/cliente/criar}">Cadastro de
+                        clientes</a></div>
+            <div class="menu-label menu-label-secondary">CONSULTAR</div><div class="link nav-secondary"><span class="nav-glyph">↗</span><a th:href="@{/venda}">Vendas registradas</a></div><div class="link nav-secondary"><span class="nav-glyph">↗</span><a th:href="@{/produto}">Produtos cadastrados</a></div><div class="link nav-secondary"><span class="nav-glyph">↗</span><a th:href="@{/cliente}">Clientes cadastrados</a></div>
+            </div>
+        <div class="user">
+                <span class="avatar-brand">NE</span>
+                <div class="username">NexoEstoque • Gestão</div>
+            </div>
+        </div>
+    </section>
+    <section class="list_container">
+        <div th:if="${clientes.isEmpty}" class="erro">
+            <p>Não há clientes cadastrados</p>
+        </div>
+        <div th:unless="${clientes.isEmpty}" class="table_container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Telefone</th>
+                        <th>Email</th>
+                        <th>Endereço</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="c : ${clientes}">
+                        <td th:text="${c.nome}">{c.nome}</td>
+                        <td th:text="${c.telefone}">{c.telefone}</td>
+                        <td th:text="${c.email}">{c.email}</td>
+                        <td th:text="${c.endereco}">{c.endereco}</td>
+                        <td class="td_button"><button type="button" class="submit"><a
+                                    th:href="@{/cliente/editar/{id}(id=${c.id})}">Editar</a></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</body>
+
+</html>

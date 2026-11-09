@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NexoEstoque</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+  <header>
+    <div class="header">
+      <div class="logo"><a th:href="@{/}" class="brand-link"><span class="brand-symbol">N</span><span>Nexo<span class="brand-accent">Estoque</span></span></a></div>
+      <div class="header-status"><span class="status-dot"></span> Painel de gestão</div>
+    </div>
+  </header>
+  <section>
+    <div class="sidenav">
+      <div class="menu"><div class="menu-label">MENU PRINCIPAL</div><div class="link home-link"><span class="home-icon">⌂</span><a th:href="@{/}">Visão geral</a></div>
+        <div class="link"><span class="gravity-ui--tag-dollar"></span><a th:href="@{/venda/criar}">Nova venda</a></div>
+        <div class="link"><span class="bxs--t-shirt"></span><a th:href="@{/produto/criar}">Novo produto</a>
+        </div>
+        <div class="link"><span class="mdi--people-add"></span><a th:href="@{/cliente/criar}">Novo cliente</a>
+        </div>
+      <div class="menu-label menu-label-secondary">CONSULTAR</div><div class="link nav-secondary"><span class="nav-glyph">↗</span><a th:href="@{/venda}">Vendas registradas</a></div><div class="link nav-secondary"><span class="nav-glyph">↗</span><a th:href="@{/produto}">Produtos cadastrados</a></div><div class="link nav-secondary"><span class="nav-glyph">↗</span><a th:href="@{/cliente}">Clientes cadastrados</a></div>
+            </div>
+        <div class="user">
+        <span class="avatar-brand">NE</span>
+        <div class="username">NexoEstoque • Gestão</div>
+      </div>
+    </div>
+  </section>
+  <section class="form_container">
+    <div class="form">
+      <div class="form_title">
+        <span class="mdi--people-add"></span><span class="title">Novo cliente</span>
+      </div>
+      <div class="form_content">
+        <form th:action="@{/cliente/criar}" method="post" th:object="${criarClienteRequest}">
+          <div class="field">
+            <label for="nome">Nome:</label>
+            <input id="nome" th:field="*{nome}" type="text" class="input" required>
+          </div>
+          <div class="field_divided">
+            <div class="field">
+              <label for="email">E-mail:</label>
+              <input id="email" th:field="*{email}" type="email" class="input_small" required>
+            </div>
+            <div class="field">
+              <label for="telefone">Telefone:</label>
+              <input id="telefone" th:field="*{telefone}" type="text" class="input_smaller" required>
+            </div>
+          </div>
+          <div class="field">
+            <label for="endereco">Endereço:</label>
+            <input id="endereco" th:field="*{endereco}" type="text" class="input" required>
+          </div>
+          <div class="field_spaced">
+            <div class="buttons">
+              <button type="button" class="cancel" onclick="history.back()">Cancelar</button>
+              <button type="submit" class="submit">Cadastrar cliente</button>
+            </div>
+            <div class="buttons">
+              <button class="ver"><a href="/cliente">Ver todos ></a></button>
+            </div>
+
+          </div>
+          <div th:if="${erro}">
+            <p th:text="${erro}"></p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const telefoneInput = document.getElementById('telefone');
+      telefoneInput.addEventListener('input', function (e) {
+        let value = e.target.value.replace(/\D/g, ''); // remove tudo que não é número
+        if (value.length > 11) value = value.slice(0, 11); // limita a 11 dígitos
+
+        if (value.length > 6) {
+          e.target.value = `(${value.slice(0, 2)}) ${value.slice(2, 7)}-${value.slice(7)}`;
+        } else if (value.length > 2) {
+          e.target.value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
+        } else {
+          e.target.value = value;
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

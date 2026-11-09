@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NexoEstoque</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+    <header>
+        <div class="header">
+            <div class="logo"><a th:href="@{/}" class="brand-link"><span class="brand-symbol">N</span><span>Nexo<span class="brand-accent">Estoque</span></span></a></div>
+            <div class="header-status"><span class="status-dot"></span> Painel de gestão</div>
+        </div>
+    </header>
+    <section>
+        <div class="sidenav">
+            <div class="menu"><div class="menu-label">MENU PRINCIPAL</div><div class="link home-link"><span class="home-icon">⌂</span><a th:href="@{/}">Visão geral</a></div>
+                <div class="link"><span class="gravity-ui--tag-dollar"></span><a th:href="@{/venda/criar}">Nova venda</a>
+                </div>
+                <div class="link"><span class="bxs--t-shirt"></span><a th:href="@{/produto/criar}">Cadastro de
+                        produtos</a></div>
+                <div class="link"><span class="mdi--people-add"></span><a th:href="@{/cliente/criar}">Cadastro de
+                        clientes</a></div>
+            <div class="menu-label menu-label-secondary">CONSULTAR</div><div class="link nav-secondary"><span class="nav-glyph">↗</span><a th:href="@{/venda}">Vendas registradas</a></div><div class="link nav-secondary"><span class="nav-glyph">↗</span><a th:href="@{/produto}">Produtos cadastrados</a></div><div class="link nav-secondary"><span class="nav-glyph">↗</span><a th:href="@{/cliente}">Clientes cadastrados</a></div>
+            </div>
+        <div class="user">
+                <span class="avatar-brand">NE</span>
+                <div class="username">NexoEstoque • Gestão</div>
+            </div>
+        </div>
+    </section>
+    <section class="form_container">
+        <div class="form_bigger">
+            <div class="form_title">
+                <span class="gravity-ui--tag-dollar"></span><span class="title">Editar venda</span>
+            </div>
+            <div class="form_content">
+                <form th:action="@{/venda/editar}" method="post" th:object="${editarVendaRequest}">
+                    <input type="hidden" th:field="*{id}" />
+                    <div class="field_divided">
+                        <div class="field">
+                            <label for="cliente">Cliente:</label>
+                            <select id="cliente" th:field="*{cliente}" class="input_small" required>
+                                <option value=""></option>
+                                <option th:each="c : ${clientes}" th:value="${c.id}" th:text="${c.nome}">
+                                </option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="data">Data:</label>
+                            <input id="data" th:field="*{data}" type="date" class="input_smaller" required>
+                        </div>
+                    </div>
+
+                    <div class="field_divided">
+                        <div class="field">
+                            <label for="produto">Produto:</label>
+                            <select id="produto" th:field="*{produto}" class="input_small" required>
+                                <option value=""></option>
+                                <option th:each="p : ${produtos}" th:value="${p.id}" th:data-valor="${p.valor}"
+                                    th:text="${p.sku}">
+                                </option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="quantidade">Quantidade:</label>
+                            <input id="quantidade" th:field="*{quantidade}" type="number" min="1" value="1"
+                                class="input_smaller" required>
+                        </div>
+                    </div>
+                    <div class="field_divided">
+                        <div class="field">
+                            <label for="statusPagamento">Status de Pagamento:</label>
+                            <select id="statusPagamento" th:field="*{statusPagamento}" class="input_smaller" required>
+                                <option value=""></option>
+                                <option value="Aguardando pagamento">Aguardando pagamento</option>
+                                <option value="Pago">Pago</option>
+
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="statusEntrega">Status de Entrega:</label>
+                            <select id="statusEntrega" th:field="*{statusEntrega}" class="input_smaller" required>
+                                <option value=""></option>
+                                <option value="Aguardando entrega">Aguardando entrega</option>
+                                <option value="Entregue">Entregue</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="desconto">Desconto:</label>
+                            <input id="desconto" th:field="*{desconto}" type="text" inputmode="numeric" min="0"
+                                step="0.01" value="0" class="input_smaller">
+                        </div>
+                    </div>
+                    <div class="field_spaced">
+                        <div class="field">
+                            <div class="field_divided">
+                                <input id="parcelado" th:field="*{parcelado}" type="checkbox" class="checkbox">
+                                <label for="parcelado">Pagamento parcelado</label>
+                            </div>
+                            <div class="field">
+                                <div class="field_hidden hidden">
+                                    <input type="number" th:field="*{qtdParcelas}" id="qtdParcelas" class="input_int">
+                                    <label for="qtdParcelas">Quantidade de parcelas</label>
+                                </div>
+                                <div class="field_hidden hidden">
+                                    <input type="number" th:field="*{qtdPagas}" id="qtdPagas" class="input_int">
+                                    <label for="qtdPagas">Parcelas já pagas</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field_hidden hidden">
+                            <div class="subtotal">
+                                <div id="parcela-display">Valor da parcela: R$ 0,00</div>
+                                <div id="recebido-display">Total recebido: R$ 0,00</div>
+                                <div id="areceber-display">Total a receber: R$ 0,00</div>
+                            </div>
+                        </div>
+
+                        <div class="subtotal">
+                            <div id="subtotal-display">Subtotal: R$ 0,00</div>
+                            <div id="desconto-display">Desconto: R$ -0,00</div>
+                            <div class="total">
+                                <div id="total-display">Total: R$ 0,00</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field_spaced">
+                        <div class="buttons">
+                            <button type="button" class="cancel" onclick="history.back()">Cancelar</button>
+                            <button type="submit" class="submit">Salvar edições</button>
+                        </div>
+                        <div class="buttons">
+                            <button type="button" onclick="document.getElementById('dialog-delete').showModal()"
+                                class="cancel">Excluir</button>
+                        </div>
+                    </div>
+                    <div th:if="${erro}" class="erro">
+                        <p th:text="${erro}" ></p>
+                    </div>
+                </form>
+                <form>
+                    <dialog id="dialog-delete" class="modal">
+                        <div class="modal-box">
+                            <h3>Excluir venda</h3>
+                            <p>Tem certeza que deseja excluir essa venda?</p>
+                            <div class="modal-action">
+                                <form method="dialog">
+                                    <button onclick="history.back()" class="cancel">Cancelar</button>
+                                </form>
+                                <form th:action="@{/venda/{id}(id=*{id})}" method="post">
+                                    <input type="hidden" name="_method" value="DELETE" />
+                                    <button type="submit" class="submit">Sim, excluir</button>
+                                </form>
+                            </div>
+                        </div>
+                    </dialog>
+                </form>
+                <script>
+                    const descontoInput = document.getElementById("desconto");
+                    let totalAtual = 0;
+
+                    function calcularTotal() {
+                        const select = document.getElementById("produto");
+                        const option = select.options[select.selectedIndex];
+                        const valorUnit = parseFloat(option?.dataset?.valor) || 0;
+                        const qtd = parseInt(document.getElementById("quantidade").value) || 0;
+                        const percentual = parseFloat(descontoInput.value.replace("%", "")) || 0;
+
+                        const subtotal = valorUnit * qtd;
+                        const desconto = subtotal * (percentual / 100);
+                        totalAtual = subtotal - desconto;
+
+                        const fmt = v => "R$ " + v.toFixed(2).replace(".", ",");
+
+                        document.getElementById("subtotal-display").textContent = "Subtotal: " + fmt(subtotal);
+                        document.getElementById("desconto-display").textContent = "Desconto: -" + fmt(desconto);
+                        document.getElementById("total-display").textContent = "Total: " + fmt(totalAtual);
+
+                        calcularParcelamento();
+                    }
+
+                    function calcularParcelamento() {
+                        const fmt = v => "R$ " + v.toFixed(2).replace(".", ",");
+                        const qtdParcelas = parseInt(document.getElementById("qtdParcelas").value) || 0;
+                        const qtdPagas = parseInt(document.getElementById("qtdPagas").value) || 0;
+
+                        const valorParcela = qtdParcelas > 0 ? totalAtual / qtdParcelas : 0;
+                        const totalRecebido = valorParcela * qtdPagas;
+                        const totalAReceber = totalAtual - totalRecebido;
+
+                        document.getElementById("parcela-display").textContent = "Valor da parcela: " + fmt(valorParcela);
+                        document.getElementById("recebido-display").textContent = "Total recebido: " + fmt(totalRecebido);
+                        document.getElementById("areceber-display").textContent = "Total a receber: " + fmt(totalAReceber);
+                    }
+
+                    descontoInput.addEventListener("input", function (e) {
+                        const soDigitos = e.target.value.replace(/[^\d]/g, "");
+
+                        if (soDigitos === "") {
+                            e.target.value = "";
+                        } else {
+                            e.target.value = soDigitos + "%";
+                            e.target.setSelectionRange(soDigitos.length, soDigitos.length);
+                        }
+
+                        calcularTotal();
+                    });
+
+                    document.getElementById("produto").addEventListener("change", calcularTotal);
+                    document.getElementById("quantidade").addEventListener("input", calcularTotal);
+                    document.getElementById("qtdParcelas").addEventListener("input", calcularParcelamento);
+                    document.getElementById("qtdPagas").addEventListener("input", calcularParcelamento);
+
+                    document.querySelector("form").addEventListener("submit", function () {
+                        descontoInput.value = descontoInput.value.replace("%", "") || "0";
+                    });
+
+                    document.getElementById('parcelado').addEventListener('change', function () {
+                        document.querySelectorAll('.field_hidden').forEach(function (el) {
+                            el.classList.toggle('hidden', !this.checked);
+                        }, this);
+                    });
+
+                    // On page load: format desconto, calculate all displays, and show parcelamento if checked
+                    document.addEventListener("DOMContentLoaded", function () {
+                        const rawDesconto = parseFloat(descontoInput.value) || 0;
+                        if (rawDesconto > 0) {
+                            descontoInput.value = rawDesconto + "%";
+                        }
+
+                        calcularTotal();
+
+                        const parcelado = document.getElementById("parcelado");
+                        if (parcelado.checked) {
+                            document.querySelectorAll('.field_hidden').forEach(function (el) {
+                                el.classList.remove('hidden');
+                            });
+                            calcularParcelamento();
+                        }
+                    });
+                </script>
+</body>
+
+</html>

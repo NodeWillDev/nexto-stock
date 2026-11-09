@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NexoEstoque</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+  <header>
+    <div class="header">
+      <div class="logo"><a th:href="@{/}" class="brand-link"><span class="brand-symbol">N</span><span>Nexo<span class="brand-accent">Estoque</span></span></a></div>
+      <div class="header-status"><span class="status-dot"></span> Painel de gestão</div>
+    </div>
+  </header>
+  <section>
+    <div class="sidenav">
+      <div class="menu"><div class="menu-label">MENU PRINCIPAL</div><div class="link home-link"><span class="home-icon">⌂</span><a th:href="@{/}">Visão geral</a></div>
+        <div class="link"><span class="gravity-ui--tag-dollar"></span><a th:href="@{/venda/criar}">Nova venda</a></div>
+        <div class="link"><span class="bxs--t-shirt"></span><a th:href="@{/produto/criar}">Novo produto</a>
+        </div>
+        <div class="link"><span class="mdi--people-add"></span><a th:href="@{/cliente/criar}">Novo cliente</a>
+        </div>
+      <div class="menu-label menu-label-secondary">CONSULTAR</div><div class="link nav-secondary"><span class="nav-glyph">↗</span><a th:href="@{/venda}">Vendas registradas</a></div><div class="link nav-secondary"><span class="nav-glyph">↗</span><a th:href="@{/produto}">Produtos cadastrados</a></div><div class="link nav-secondary"><span class="nav-glyph">↗</span><a th:href="@{/cliente}">Clientes cadastrados</a></div>
+            </div>
+        <div class="user">
+        <span class="avatar-brand">NE</span>
+        <div class="username">NexoEstoque • Gestão</div>
+      </div>
+    </div>
+  </section>
+  <section class="form_container">
+    <div class="form">
+      <div class="form_title">
+        <span class="bxs--t-shirt"></span><span class="title">Novo produto</span>
+      </div>
+      <div class="form_content">
+        <form th:action="@{/produto/criar}" method="post" th:object="${criarProdutoRequest}">
+          <div class="field_divided">
+            <div class="field">
+              <label for="sku">SKU:</label>
+              <input id="sku" th:field="*{sku}" type="text" class="input_small" required>
+            </div>
+            <div class="field">
+              <label for="modelo">Modelo:</label>
+              <select id="modelo" th:field="*{modelo}" class="input_smaller" required>
+                <option value=""></option>
+                <option value="Jogador">Jogador</option>
+                <option value="Torcedor">Torcedor</option>
+                <option value="Dry-Fit">Dry-Fit</option>
+                <option value="Nacional Premium">Nacional Premium</option>
+              </select>
+            </div>
+          </div>
+          <div class="field_divided">
+            <div class="field">
+              <label for="time">Time:</label>
+              <input id="time" th:field="*{time}" type="text" class="input_small" required>
+            </div>
+            <div class="field">
+              <label for="tamanho">Tamanho:</label>
+              <select id="tamanho" th:field="*{tamanho}" class="input_smaller" required>
+                <option value=""></option>
+                <option value="P">P</option>
+                <option value="M">M</option>
+                <option value="G">G</option>
+                <option value="GG">GG</option>
+                <option value="G2">G2</option>
+                <option value="G3">G3</option>
+              </select>
+            </div>
+          </div>
+          <div class="field_divided">
+            <div class="field">
+              <label for="valor">Valor:</label>
+              <input id="valor" th:field="*{valor}" type="text" class="input_small" required>
+            </div>
+            <div class="field">
+              <label for="quantidade">Quantidade:</label>
+              <input id="quantidade" th:field="*{quantidade}" type="number" class="input_smaller" required>
+            </div>
+          </div>
+          <div class="field_spaced">
+            <div class="buttons">
+              <button type="button" class="cancel" onclick="history.back()">Cancelar</button>
+              <button type="submit" class="submit">Cadastrar produto</button>
+            </div>
+            <div class="buttons">
+              <button class="ver"><a href="/produto">Ver todos ></a></button>
+            </div>
+          </div>
+          <div th:if="${erro}">
+            <p th:text="${erro}"></p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+  <script>
+    const inputValor = document.getElementById("valor");
+
+    inputValor.addEventListener("input", function (e) {
+      let valor = e.target.value.replace(/\D/g, "");
+
+      if (valor === "") {
+        e.target.value = "";
+        return;
+      }
+
+      valor = (parseInt(valor, 10) / 100).toFixed(2);
+
+      valor = valor.replace(".", ",");
+
+      e.target.value = "R$ " + valor;
+    });
+  </script>
+</body>
+
+</html>
